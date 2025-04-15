@@ -74,5 +74,19 @@ def excluir_cadastro(id):
     doc_ref.delete()
     return jsonify({'mensagem':'Cadastro excluído com sucesso!'}), 200
 
+@app.route('/admin', methods=['GET'])
+def lista_cadastros():
+    cadastros = []
+    lista = db.collection('cadastros').stream()
+    
+    for item in lista:
+        cadastros.append(item.to_dict())
+
+    if cadastros:
+        return jsonify((cadastros)), 200
+    else:
+        return jsonify({'mensagem':'Erro! Nenhum cadastro encontrado'}), 404
+
+
 if __name__ == "__main__":
     app.run()
