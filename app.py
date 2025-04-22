@@ -40,7 +40,8 @@ def cadastrar():
     db.collection('cadastros').document(str(novo_id)).set({
         "id": novo_id,
         "cpf": dados['cpf'],
-        "nome": dados['nome']
+        "nome": dados['nome'],
+        "status": "ativo",
     })
 
     return jsonify({'mensagem':'Cadastro realizado com sucesso!'}), 201
