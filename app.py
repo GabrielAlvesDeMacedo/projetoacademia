@@ -41,7 +41,7 @@ def cadastrar():
         "id": novo_id,
         "cpf": dados['cpf'],
         "nome": dados['nome'],
-        "status": "ativo",
+        "status": dados.get('status', 'true'),  # Define o status como 'ativo' por padrão
     })
 
     return jsonify({'mensagem':'Cadastro realizado com sucesso!'}), 201
@@ -59,7 +59,8 @@ def alterar_cadastro():
     if doc.exists:
         doc_ref.update({
             'cpf': dados['cpf'],
-            'nome': dados['nome']
+            'nome': dados['nome'],
+            'status': dados.get('status', 'true', 'false')  # Atualiza o status se fornecido, caso contrário mantém 'ativo'
         })
         return jsonify({'mensagem':'Cadastro atualizado com sucesso!'}), 201
     else:
