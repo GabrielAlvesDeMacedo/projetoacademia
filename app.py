@@ -87,6 +87,21 @@ def lista_cadastros():
     else:
         return jsonify({'mensagem':'Erro! Nenhum cadastro encontrado'}), 404
 
+@app.route('/admin/consultar_cpf', methods=['GET'])
+def consultar_aluno_por_cpf():
+    cpf = request.args.get('cpf')
+
+    if not cpf:
+        return jsonify({'mensagem': 'CPF não fornecido como parâmetro'}), 400
+
+    alunos_ref = db.collection('cadastros')
+    query = alunos_ref.where('cpf', '==', cpf).limit(1)
+    resultados = query.stream()
+
+    for aluno in resultados:
+        return jsonify({'id': aluno.to_dict()['id'], 'nome': aluno.to_dict()['nome'], 'cpf': aluno.to_dict()['cpf']}), 200
+
+    return jsonify({'mensagem': 'Aluno não encontrado com o CPF fornecido'}), 404
 
 if __name__ == "__main__":
     app.run()
